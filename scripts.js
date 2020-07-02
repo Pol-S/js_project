@@ -24,6 +24,12 @@ function togglePlay() {
   }
 }
 
+function togglePause() {
+  if (video.play) {
+    video.pause;
+  }
+}
+
 function updateButton() {
   const icon = this.paused ? "►" : "❚ ❚";
   console.log(icon);
@@ -32,6 +38,10 @@ function updateButton() {
 
 function skip() {
   video.currentTime += parseFloat(this.dataset.skip);
+}
+
+function skipForward() {
+  video.currentTime += parseFloat(25);
 }
 
 function handleRangeUpdate() {
@@ -77,14 +87,21 @@ recognition.addEventListener("result", (e) => {
     .map((result) => result.transcript)
     .join("");
 
-  // const poopScript = transcript.replace(/poop|poo|shit|dump/gi, "💩");
-  // p.textContent = poopScript;
-
   if (e.results[0].isFinal) {
     console.log(transcript);
   }
+  /* we need a voice recog for "play", "pause","skip ahead", "skip back" */
   if (transcript.includes("play")) {
-    console.log("This is where we hit the play button");
+    togglePlay();
+  }
+
+  if (transcript.includes("pause")) {
+    togglePlay();
+  }
+
+  if (transcript.includes("skip foward")) {
+    console.log("Skip forward was heard");
+    skipForward();
   }
 });
 recognition.addEventListener("end", recognition.start);
