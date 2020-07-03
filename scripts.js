@@ -101,7 +101,7 @@ recognition.addEventListener("result", (e) => {
   if (e.results[0].isFinal) {
     console.log(transcript);
   }
-  /* we need a voice recog for "play", "pause","skip ahead", "skip back" */
+  /* we need a voice recog for "play", "pause","skip ahead", "skip back", "mute", "full volume" */
   if (transcript.includes("play")) {
     onlyPlay();
   }
@@ -110,13 +110,13 @@ recognition.addEventListener("result", (e) => {
     onlyPause();
   }
 
-  if (transcript.includes("skip foward")) {
+  if (transcript.includes("skip forward")) {
     console.log("Skip forward was heard");
     skipForward();
   }
 
   if (transcript.includes("skip back")) {
-    console.log("Skip forward was heard");
+    console.log("Skip back was heard");
     skipBackward();
   }
 });
