@@ -47,7 +47,7 @@ function skip() {
 }
 
 function skipForward() {
-  video.currentTime += parseFloat(25);
+  video.currentTime += parseFloat(10);
 }
 
 function skipBackward() {
@@ -116,6 +116,11 @@ recognition.addEventListener("result", (e) => {
   }
 
   if (transcript.includes("skip back")) {
+    console.log("Skip back was heard");
+    skipBackward();
+  }
+
+    if (transcript.includes("mute")) {
     console.log("Skip back was heard");
     skipBackward();
   }
