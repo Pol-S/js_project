@@ -10,6 +10,7 @@ const toggle = player.querySelector(".toggle");
 const skipButtons = player.querySelectorAll("[data-skip]");
 const ranges = player.querySelectorAll(".player__slider");
 const fullscreen = player.querySelector(".fullscreen");
+const volumeBar = player.querySelector("volume")
 
 const recognition = new SpeechRecognition();
 recognition.interimResults = true;
@@ -52,6 +53,10 @@ function skipForward() {
 
 function skipBackward() {
   video.currentTime -= parseFloat(10);
+}
+
+function restart() {
+  video.currentTime = 0;
 }
 
 function handleRangeUpdate() {
@@ -109,7 +114,7 @@ recognition.addEventListener("result", (e) => {
   if (e.results[0].isFinal) {
     console.log(transcript);
   }
-  /* we need a voice recog for "play", "pause","skip ahead", "skip back", "mute", "full volume" */
+  /* we need a voice recog for "play", "pause","skip ahead", "skip back", "mute", "unmute", "restart"*/
   if (transcript.includes("play")) {
     onlyPlay();
   }
@@ -124,6 +129,11 @@ recognition.addEventListener("result", (e) => {
 
   if (transcript.includes("skip back")) {
     skipBackward();
+  }
+
+  if (transcript.includes("restart")) {
+    restart();
+    onlyPause();
   }
 
   if (transcript.includes("mute")) {
