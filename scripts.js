@@ -73,6 +73,14 @@ function toggleFullscreen() {
   video.requestFullscreen();
 }
 
+function mute() {
+  video.volume = 0;
+}
+
+function unmute() {
+  video.volume = 1;
+}
+
 /* Hook up the event listeners */
 video.addEventListener("click", togglePlay);
 video.addEventListener("play", updateButton);
@@ -111,19 +119,21 @@ recognition.addEventListener("result", (e) => {
   }
 
   if (transcript.includes("skip forward")) {
-    console.log("Skip forward was heard");
     skipForward();
   }
 
   if (transcript.includes("skip back")) {
-    console.log("Skip back was heard");
     skipBackward();
   }
 
-    if (transcript.includes("mute")) {
-    console.log("Skip back was heard");
-    skipBackward();
+  if (transcript.includes("mute")) {
+    mute();
   }
+
+  if (transcript.includes("unmute")) {
+    unmute();
+  }
+
 });
 recognition.addEventListener("end", recognition.start);
 recognition.start();
