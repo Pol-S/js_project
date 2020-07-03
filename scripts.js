@@ -24,9 +24,15 @@ function togglePlay() {
   }
 }
 
-function togglePause() {
+function onlyPlay() {
+  if (video.paused) {
+    video.play();
+  } 
+}
+
+function onlyPause() {
   if (video.play) {
-    video.pause;
+    video.pause();
   }
 }
 
@@ -42,6 +48,10 @@ function skip() {
 
 function skipForward() {
   video.currentTime += parseFloat(25);
+}
+
+function skipBackward() {
+  video.currentTime -= parseFloat(10);
 }
 
 function handleRangeUpdate() {
@@ -80,6 +90,7 @@ progress.addEventListener("click", scrub);
 progress.addEventListener("mousemove", (e) => mousedown && scrub(e));
 progress.addEventListener("mousedown", () => (mousedown = true));
 progress.addEventListener("mouseup", () => (mousedown = false));
+/* speech detection event listener */
 
 recognition.addEventListener("result", (e) => {
   const transcript = Array.from(e.results)
@@ -92,19 +103,22 @@ recognition.addEventListener("result", (e) => {
   }
   /* we need a voice recog for "play", "pause","skip ahead", "skip back" */
   if (transcript.includes("play")) {
-    togglePlay();
+    onlyPlay();
   }
 
   if (transcript.includes("pause")) {
-    togglePlay();
+    onlyPause();
   }
 
   if (transcript.includes("skip foward")) {
     console.log("Skip forward was heard");
     skipForward();
   }
+
+  if (transcript.includes("skip back")) {
+    console.log("Skip forward was heard");
+    skipBackward();
+  }
 });
 recognition.addEventListener("end", recognition.start);
 recognition.start();
-
-/* speech detection */
