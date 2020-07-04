@@ -11,6 +11,7 @@ const skipButtons = player.querySelectorAll("[data-skip]");
 const ranges = player.querySelectorAll(".player__slider");
 const fullscreen = player.querySelector(".fullscreen");
 const volumeBar = player.querySelector("volume")
+const playbackRate = player.querySelector("playbackrate")
 
 const recognition = new SpeechRecognition();
 recognition.interimResults = true;
@@ -86,6 +87,18 @@ function unmute() {
   video.volume = 1;
 }
 
+function maxSpeed() {
+  video['playbackRate'] = 2;
+}
+
+function minSpeed() {
+  video['playbackRate'] = 0.5;
+}
+
+function normalSpeed() {
+  video['playbackRate'] = 1;
+}
+
 /* Hook up the event listeners */
 video.addEventListener("click", togglePlay);
 video.addEventListener("play", updateButton);
@@ -142,6 +155,18 @@ recognition.addEventListener("result", (e) => {
 
   if (transcript.includes("unmute")) {
     unmute();
+  }
+
+  if (transcript.includes("fast forward")) {
+    maxSpeed();
+  }
+
+  if (transcript.includes("slow")) {
+    minSpeed();
+  }
+
+  if (transcript.includes("normal")) {
+    normalSpeed();
   }
 
 });
