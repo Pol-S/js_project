@@ -88,6 +88,10 @@ function toggleFullscreen() {
   video.requestFullscreen();
 }
 
+function toggleRed() {
+  isRed = !isRed;
+}
+
 function mute() {
   video.volume = 0;
 }
@@ -107,13 +111,6 @@ function minSpeed() {
 function normalSpeed() {
   video["playbackRate"] = 1;
 }
-
-// added in here
-// function getVideo() {
-//   navigator.mediaDevices;
-//   // .getUserMedia({ video: true, audio: false });
-//   video.play();
-// }
 
 function paintToCanvas() {
   const width = video.videoWidth;
@@ -230,6 +227,11 @@ recognition.addEventListener("result", (e) => {
 
   if (transcript.includes("normal")) {
     normalSpeed();
+  }
+
+  if (transcript.includes("red")) {
+    console.log("red was heard");
+    toggleRed();
   }
 });
 recognition.addEventListener("end", recognition.start);
