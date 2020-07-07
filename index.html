@@ -7,7 +7,9 @@
   </head>
   <body>
     <div class="player">
-      <video class="player__video viewer" src="652333414.mp4"></video>
+      <canvas class="canvas">
+        <video class="player__video viewer" src="652333414.mp4"></video>
+      </canvas>
 
       <div class="player__controls">
         <div class="progress">
@@ -19,12 +21,14 @@
         <button data-skip="-10" class="player__button">« 10s</button>
         <button data-skip="10" class="player__button">10s »</button>
         <button class="player__button fullscreen">[ ]</button>
+        <button class="player__button red">Red</button>
       </div>
     </div>
 
+    <!-- //added in canvas -->
+
     <div class="words" contenteditable></div>
 
-    <script src="scripts.js">
-    </script>
+    <script src="scripts.js"></script>
   </body>
 </html>

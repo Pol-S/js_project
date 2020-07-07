@@ -10,14 +10,23 @@ const toggle = player.querySelector(".toggle");
 const skipButtons = player.querySelectorAll("[data-skip]");
 const ranges = player.querySelectorAll(".player__slider");
 const fullscreen = player.querySelector(".fullscreen");
-const volumeBar = player.querySelector("volume")
-const playbackRate = player.querySelector("playbackrate")
+const volumeBar = player.querySelector("volume");
+const playbackRate = player.querySelector("playbackrate");
+const redbutton = player.querySelector(".red");
+
+//Added this in
+const canvas = document.querySelector(".canvas");
+const ctx = canvas.getContext("2d");
+// const strip = document.querySelector(".strip");
+// const snap = document.querySelector(".snap");
+// Added this in//
 
 const recognition = new SpeechRecognition();
 recognition.interimResults = true;
 recognition.lang = "en-US";
 
 /*functions */
+
 function togglePlay() {
   if (video.paused) {
     video.play();
@@ -29,7 +38,7 @@ function togglePlay() {
 function onlyPlay() {
   if (video.paused) {
     video.play();
-  } 
+  }
 }
 
 function onlyPause() {
@@ -88,15 +97,63 @@ function unmute() {
 }
 
 function maxSpeed() {
-  video['playbackRate'] = 2;
+  video["playbackRate"] = 2;
 }
 
 function minSpeed() {
-  video['playbackRate'] = 0.5;
+  video["playbackRate"] = 0.5;
 }
 
 function normalSpeed() {
-  video['playbackRate'] = 1;
+  video["playbackRate"] = 1;
+}
+
+// added in here
+// function getVideo() {
+//   navigator.mediaDevices;
+//   // .getUserMedia({ video: true, audio: false });
+//   video.play();
+// }
+
+function paintToCanvas() {
+  const width = video.videoWidth;
+  const height = video.videoHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  return setInterval(() => {
+    ctx.drawImage(video, 0, 0, width, height);
+    //     //take pixels out
+    let pixels = ctx.getImageData(0, 0, width, height);
+    //     // mess with them
+    if (isRed) {
+      pixels = redEffect(pixels);
+    }
+
+    // pixels = rgbSplit(pixels);
+    //     // ctx.globalAlpha = 0.8;
+
+    //     // pixels = greenScreen(pixels);
+    //     // put them back
+    ctx.putImageData(pixels, 0, 0);
+  }, 500);
+}
+
+function redEffect(pixels) {
+  for (let i = 0; i < pixels.data.length; i += 4) {
+    pixels.data[i + 0] = pixels.data[i + 0] + 200; // RED
+    pixels.data[i + 1] = pixels.data[i + 1] - 50; // GREEN
+    pixels.data[i + 2] = pixels.data[i + 2] * 0.5; // Blue
+  }
+  return pixels;
+}
+function rgbSplit(pixels) {
+  for (let i = 0; i < pixels.data.length; i += 4) {
+    pixels.data[i - 150] = pixels.data[i + 0]; // RED
+    pixels.data[i + 500] = pixels.data[i + 1]; // GREEN
+    pixels.data[i - 550] = pixels.data[i + 2]; // Blue
+  }
+  return pixels;
 }
 
 /* Hook up the event listeners */
@@ -104,6 +161,12 @@ video.addEventListener("click", togglePlay);
 video.addEventListener("play", updateButton);
 video.addEventListener("pause", updateButton);
 video.addEventListener("timeupdate", handleProgress);
+
+let isRed = false;
+redbutton.addEventListener("click", () => (isRed = !isRed));
+//added in here
+video.addEventListener("canplay", paintToCanvas);
+//added above
 fullscreen.addEventListener("click", toggleFullscreen);
 
 toggle.addEventListener("click", togglePlay);
@@ -168,7 +231,8 @@ recognition.addEventListener("result", (e) => {
   if (transcript.includes("normal")) {
     normalSpeed();
   }
-
 });
 recognition.addEventListener("end", recognition.start);
 recognition.start();
+
+// getVideo();
